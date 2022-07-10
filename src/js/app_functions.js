@@ -11,8 +11,7 @@ function updateInterface(message = ""){
     player2ScoreDiv.innerHTML = match.players[1].score;
     p1legs.innerHTML = match.players[0].legs;
     p2legs.innerHTML = match.players[1].legs;
-    match.atTheOche === match.players[0] ? player1NameDiv.classList.add('active') : player1NameDiv.classList.remove('active');
-    match.atTheOche === match.players[1] ? player2NameDiv.classList.add('active') : player2NameDiv.classList.remove('active');
+    match.calculateAverages();
     updateFinishButtons();
     turnLogManager();
 }
@@ -86,21 +85,20 @@ function validateScore(score){
     let validate180 = (score <= 180);                                // if score is less than or equal to 180
     let validate0 = (score >= 0);                                   // if score is greater than or equal to 0
     let validateBust = (score <= match.atTheOche.score);            // if score is less than or equal to current player's score
-    let validate1 = (score !== (match.atTheOche.score - 1));        // if score is not equal to current player's score minus 1
+    let validate1 = (match.atTheOche.score - score) != 1;        // if score is not equal to current player's score minus 1
 
-    if(!validate180){window.alert("Score must be less than 180");}  // if score is not valid, alert user
-    if(!validate0){window.alert("Score must be greater than 0");}
-    if(!validateBust){window.alert("Busted!");}
-    if(!validate1){window.alert("Busted!");}
+    if(!validate180){messageAlert("Score must be less than 180");}  // if score is not valid, alert user
+    if(!validate0){messageAlert("Score must be greater than 0");}
+    if(!validateBust){messageAlert("Busted!", "You cannot score more than you have left");}
+    if(!validate1){messageAlert("Busted!", "You cannot leave yourself with 1 point. Please enter 0, or re-enter correct score");}
 
     turnScore.innerText = "";                                       // clear turnScore div
     if( validate180 && validate0 && validateBust && validate1){
         match.throwDarts(score);
         match.calculateAverages();
         setTimeout(function(){
-            match.nextPlayer();
             isMatchOver();
-        });
+        }, 1000);
         return true;
     }
 
@@ -155,7 +153,6 @@ function updateFinishButtons(){
     }
 }
 
-var elem = document.documentElement;
 
 function openFullscreen() {
     if (elem.requestFullscreen) {
@@ -195,12 +192,12 @@ function clickDirector(e){
     }
 
     else if(e.target.classList.contains('finish-btn')) {
-        console.log("finish-btn");
+        match.quickFinish(e);
     }
 
     else if(e.target.classList.contains('enter-btn')) {
         let value = turnScore.innerText;
-        validateScore(value);
+        (value === "") ? messageAlert("No Score", "Please enter a valid score and press Enter...") : validateScore(value);
     }
 
     else if(e.target.classList.contains('easy-score-btn')) {
@@ -236,9 +233,9 @@ function displayDirector(active){
     matchSetupScreen.classList.add('hidden');
     appScreen.classList.add('hidden');
     easyScoreScreen.classList.add('hidden');
+    messageModal.classList.add('hidden');
     active.classList.remove('hidden');
 }
-
 
 
 
@@ -264,4 +261,13 @@ function startMatch(){
     match.startNewLeg();
     displayDirector(appScreen);
     openFullscreen();
+}
+
+function messageAlert(title, message){
+    messageTitle.innerText = title;
+    messageDescription.innerText = message;
+    displayDirector(messageModal);
+    setTimeout(function(){
+        displayDirector(appScreen);
+    }, 3000);
 }

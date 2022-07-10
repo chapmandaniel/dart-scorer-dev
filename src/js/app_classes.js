@@ -91,6 +91,8 @@ class Match{
         }
 
         if(over){
+            let wonLeg = (this.players[0].name === this.atTheOche.name) ? this.players[1].name : this.players[0].name;
+            messageAlert("Leg over!", `${wonLeg} won the leg...`);
             this.legsPlayed++; // increment the number of legs played
             this.players[0].matchLog.push(this.players[0].visits.slice()); // add the visits array to the matchLog array
             this.players[1].matchLog.push(this.players[1].visits.slice());
@@ -130,7 +132,18 @@ class Match{
                 return ((sum / count) * 3).toFixed(2);
             }();
         }
-        (Number.isNaN(match.playerA.legAverage)) ? console.log(0) : console.log(match.playerA.legAverage) ;
-        (Number.isNaN(match.playerB.legAverage)) ? console.log(0) : console.log(match.playerB.legAverage) ;
+        console.log(Number.isNaN(0));
+        (match.players[0].legAverage === "NaN") ? p1LegAvg.innerText = "Leg Avg: 0" : p1LegAvg.innerHTML = "Leg Avg: " + match.players[0].legAverage ;
+        (match.players[1].legAverage === "NaN") ? p2LegAvg.innerText = "Leg Avg: 0" : p2LegAvg.innerHTML = "Leg Avg: " + match.players[1].legAverage ;
+    }
+
+    quickFinish(e){
+        if(e.target.id === "finish-darts-1") {
+            match.throwDarts(match.atTheOche.score, 1);
+        } else if(e.target.id === "finish-darts-2") {
+            match.throwDarts(match.atTheOche.score, 2);
+        } else if(e.target.id === "finish-darts-3") {
+            match.throwDarts(match.atTheOche.score, 3);
+        }
     }
 }

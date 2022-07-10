@@ -23,6 +23,14 @@ const setupDecreaseLeg = document.querySelector('#btn-decrease-leg');
 const setupAddLeg = document.querySelector('#btn-increase-leg');
 let setupNumLegs = document.querySelector('#setup-num-legs');
 
+const p1LegAvg = document.querySelector('#p1LegAvg');
+const p2LegAvg = document.querySelector('#p2LegAvg');
+
+const messageModal = document.querySelector('#messages-modal');
+const messageTitle = document.querySelector('#message-title');
+const messageDescription = document.querySelector('#message-description');
+const messageButton = document.querySelector('#message-button');
+
 
 const nmDivContainer = document.querySelector('#nm-full-container');
 const nmButton = document.querySelector('#nm-submit');
@@ -46,10 +54,5 @@ appBtn.forEach(function(btn) {
 });
 
 
-
-
-
-
-displayDirector(matchSetupScreen);
 
 
