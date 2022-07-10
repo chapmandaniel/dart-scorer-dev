@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <title>DC Dart</title>
+    <link href="css/output.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
+</head>
+<body class="lg:max-w-3xl ml-auto mr-auto text-center text-neutral-200 h-screen bg-gray-100">
+
+<!-- Match Set Up Form -->
+<div id="match-setup" class="h-screen flex justify-center hidden">
+
+    <div class="p-14 m-12 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700 h-fit mt-auto mb-auto w-1/2">
+        <div class="grid gap-6 mb-6 lg:grid-cols-2">
+            <div>
+                <label for="p1_name" class="block mb-2 text-2xl font-medium text-gray-900 dark:text-gray-300 ">Player 1</label>
+                <input type="text" id="p1_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Name" required>
+            </div>
+            <div>
+                <label for="p2_name" class="block mb-2 text-2xl font-medium text-gray-900 dark:text-gray-300">Player 2</label>
+                <input type="text" id="p2_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter Name" required>
+            </div>
+        </div>
+        <div class="flex flex-row justify-center align-middle mb-10 mt-10">
+            <span class="text-2xl">Race to </span>
+            <span id="setup-num-legs" class="pl-5 pr-5 align-middle bg-gray-100 text-2xl ml-1 mr-1 border border-gray-700 rounded-lg">8</span>
+            <span class="ml-1"><img class="app-btn setup-minus" id="btn-decrease-leg" src="images/minus_icon.png" width="30px" height="30px"></span>
+            <span class="ml-1"><img class="app-btn setup-plus" id="btn-increase-leg" src="images/add_icon.png" width="30px" height="30px"></span>
+        </div>
+        <button class="text-white bg-slate-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onclick="startMatch()">Start Match</button>
+    </div>
+
+</div>
+
+<!-- App Main Container -->
+<div id="app-container" class="hidden">
+    <!-- Top 3 column row for scores -->
+    <div class="flex flex-row justify-center items-center" style="height: 20vh;">
+
+        <!-- Player 1 score -->
+        <div class="basis-1/3 bg-gray-300 h-full w-full">
+            <div class="h-full flex flex-col items-center">
+                <div class="p-2 justify-start mb-auto w-full text-3xl border-zinc-800 border-b-2 bg-gray-400 bg-active" id="player1-name">Player 1</div>
+                <div class="p-2 w-full text-8xl" id="player1-score">501</div>
+                <div class="p-2 justify-end mt-auto w-full text-neutral-400 border-zinc-800 border-t-2">Leg: 65.6</div>
+            </div>
+        </div>
+
+        <!-- middle score console -->
+        <div class="basis-1/3 bg-gray-300 h-full w-full border-zinc-800 border-l-8 border-r-8">
+            <div class="h-full flex flex-col items-center opacity-50">
+                <div class="p-2 justify-start mb-auto w-full text-3xl bg-gray-400"><span id="p1legs">0</span> - <span id="p2legs">0</span> </div>
+                <div class="p-2 w-full text-7xl" id="turn-score"></div>
+                <div class="p-2 justify-end mt-auto w-full text-neutral-500">Race To 6</div>
+            </div>
+        </div>
+
+        <!-- Player 2 score -->
+        <div class="basis-1/3 bg-gray-300 h-full w-full">
+            <div class="h-full flex flex-col items-center">
+                <div class="p-2 justify-start mb-auto w-full text-3xl bg-gray-400 border-zinc-800 border-b-2" id="player2-name">Player 1</div>
+                <div class="p-2 w-full text-8xl" id="player2-score">501</div>
+                <div class="p-2 justify-end mt-auto w-full text-neutral-400 border-zinc-800 border-t-2 text-md">Leg: 63.1</div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 3 column container section for everything else -->
+    <div class="flex flex-row" style="height: 80vh;">
+
+        <!-- Left score log column -->
+        <div class="basis-1/6 border-t-8 border-zinc-800 bg-gray-200" id="player1-turn-log" id="player-1-turn-log">
+
+        </div>
+
+        <!-- Middle buttons section container -->
+        <div class="basis-4/6 bg-zinc-800">
+
+            <!-- Columns for the quick finish buttons -->
+            <div class="flex flex-row" style="height: 7vh;">
+                <div class="basis-1/3 pl-2 pt-2 pb-2"><div class="app-btn finish-btn flex h-full justify-center items-center bg-slate-700 border-neutral-800 text-3xl" id="finish-darts-1">1 Dart</div></div>
+                <div class="basis-1/3 pl-2 pt-2 pb-2"><div class="app-btn finish-btn flex h-full justify-center items-center bg-slate-700 border-neutral-800 text-3xl" id="finish-darts-2">2 Dart</div></div>
+                <div class="basis-1/3 pl-2 pt-2 pb-2 pr-2"><div class="app-btn finish-btn flex h-full justify-center items-center bg-slate-700 border-neutral-800 text-3xl" id="finish-darts-3">3 Dart</div></div>
+
+            </div>
+
+            <!-- Calculator Buttons -->
+            <div class="flex flex-row flex-wrap" style="height: 40vh;">
+                <div class="basis-1/3 pl-2 pb-2"><div class="app-btn calc-btn flex h-full justify-center items-center bg-gray-300 border-neutral-800 text-3xl">1</div></div>
+                <div class="basis-1/3 pl-2 pb-2"><div class="app-btn calc-btn flex h-full justify-center items-center bg-gray-300 border-neutral-800 text-3xl">2</div></div>
+                <div class="basis-1/3 pl-2 pb-2 pr-2"><div class="app-btn calc-btn flex h-full justify-center items-center bg-gray-300 border-neutral-800 text-3xl">3</div></div>
+                <div class="basis-1/3 pl-2 pb-2"><div class="app-btn calc-btn flex h-full justify-center items-center bg-gray-300 border-neutral-800 text-3xl">4</div></div>
+                <div class="basis-1/3 pl-2 pb-2"><div class="app-btn calc-btn flex h-full justify-center items-center bg-gray-300 border-neutral-800 text-3xl">5</div></div>
+                <div class="basis-1/3 pl-2 pb-2 pr-2"><div class="app-btn calc-btn flex h-full justify-center items-center bg-gray-300 border-neutral-800 text-3xl">6</div></div>
+                <div class="basis-1/3 pl-2 pb-2"><div class="app-btn calc-btn flex h-full justify-center items-center bg-gray-300 border-neutral-800 text-3xl">7</div></div>
+                <div class="basis-1/3 pl-2 pb-2"><div class="app-btn calc-btn flex h-full justify-center items-center bg-gray-300 border-neutral-800 text-3xl">8</div></div>
+                <div class="basis-1/3 pl-2 pb-2 pr-2"><div class="app-btn calc-btn flex h-full justify-center items-center bg-gray-300 border-neutral-800 text-3xl">9</div></div>
+                <div class="basis-1/3 pl-2 pb-2"><div class="app-btn easy-score-btn flex h-full justify-center items-center bg-slate-700 border-neutral-800 text-3xl">EasyScore</div></div>
+                <div class="basis-1/3 pl-2 pb-2"><div class="app-btn calc-btn flex h-full justify-center items-center bg-gray-300 border-neutral-800 text-3xl">0</div></div>
+                <div class="basis-1/3 pl-2 pb-2 pr-2"><div class="app-btn enter-btn flex h-full justify-center items-center bg-slate-700 border-neutral-800 text-3xl">Enter</div></div>
+
+            </div>
+
+            <!-- quick score Buttons -->
+            <div class="flex flex-row flex-wrap" style="height: 24vh;">
+                <div class="basis-1/4 pl-2 pb-2"><div class="app-btn quick-btn flex h-full justify-center items-center bg-gray-400 border-neutral-800 text-2xl text-neutral-500">26</div></div>
+                <div class="basis-1/4 pl-2 pb-2"><div class="app-btn quick-btn flex h-full justify-center items-center bg-gray-400 border-neutral-800 text-2xl text-neutral-500">45</div></div>
+                <div class="basis-1/4 pl-2 pb-2"><div class="app-btn quick-btn flex h-full justify-center items-center bg-gray-400 border-neutral-800 text-2xl text-neutral-500">55</div></div>
+                <div class="basis-1/4 pl-2 pb-2 pr-2"><div class="app-btn quick-btn flex h-full justify-center items-center bg-gray-400 border-neutral-800 text-2xl text-neutral-500">57</div></div>
+                <div class="basis-1/4 pl-2 pb-2"><div class="app-btn quick-btn flex h-full justify-center items-center bg-gray-400 border-neutral-800 text-2xl text-neutral-500">60</div></div>
+                <div class="basis-1/4 pl-2 pb-2"><div class="app-btn quick-btn flex h-full justify-center items-center bg-gray-400 border-neutral-800 text-2xl text-neutral-500">81</div></div>
+                <div class="basis-1/4 pl-2 pb-2"><div class="app-btn quick-btn flex h-full justify-center items-center bg-gray-400 border-neutral-800 text-2xl text-neutral-500">85</div></div>
+                <div class="basis-1/4 pl-2 pb-2 pr-2"><div class="app-btn quick-btn flex h-full justify-center items-center bg-gray-400 border-neutral-800 text-2xl text-neutral-500">95</div></div>
+                <div class="basis-1/4 pl-2 pb-2"><div class="app-btn quick-btn flex h-full justify-center items-center bg-gray-400 border-neutral-800 text-2xl text-neutral-500">97</div></div>
+                <div class="basis-1/4 pl-2 pb-2"><div class="app-btn quick-btn flex h-full justify-center items-center bg-gray-400 border-neutral-800 text-2xl text-neutral-500">100</div></div>
+                <div class="basis-1/4 pl-2 pb-2"><div class="app-btn quick-btn flex h-full justify-center items-center bg-gray-400 border-neutral-800 text-2xl text-neutral-500">120</div></div>
+                <div class="basis-1/4 pl-2 pb-2 pr-2"><div class="app-btn quick-btn flex h-full justify-center items-center bg-gray-400 border-neutral-800 text-2xl text-neutral-500">123</div></div>
+                <div class="basis-1/4 pl-2 pb-2"><div class="app-btn quick-btn flex h-full justify-center items-center bg-gray-400 border-neutral-800 text-2xl text-neutral-500">125</div></div>
+                <div class="basis-1/4 pl-2 pb-2"><div class="app-btn quick-btn flex h-full justify-center items-center bg-gray-400 border-neutral-800 text-2xl text-neutral-500">137</div></div>
+                <div class="basis-1/4 pl-2 pb-2"><div class="app-btn quick-btn flex h-full justify-center items-center bg-gray-400 border-neutral-800 text-2xl text-neutral-500">140</div></div>
+                <div class="basis-1/4 pl-2 pb-2 pr-2"><div class="app-btn quick-btn flex h-full justify-center items-center bg-gray-400 border-neutral-800 text-2xl text-neutral-500">180</div></div>
+
+            </div>
+
+            <!-- Columns for the bottom panel -->
+            <div class="flex flex-row" style="height: 9vh;">
+                <div class="basis-1/3 bg-gray-300"></div>
+                <div class="basis-1/3 bg-gray-300"></div>
+                <div class="basis-1/3 bg-gray-300"> </div>
+            </div>
+
+        </div>
+
+        <!-- Right score log column -->
+        <div class="basis-1/6 border-t-8 border-zinc-800 bg-gray-200" id="player2-turn-log" id="player-2-turn-log">
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- EasyScore SVG section -->
+<div id="easy-score-container" class="h-screen hidden">
+
+    <div class="flex justify-center align-middle">
+        <div class="h-fit">
+            <svg width="800" height="800" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" enable-background="new 0 0 800 800" version="1.1" xml:space="preserve">
+                <style type="text/css">.st0{fill:#1B542A;}
+                .st1{fill:#9B1C20;}
+                .st2{fill:#CCC193;}
+                .st3{fill:#736F61;}</style>
+                <g class="layer"><title>Layer 1</title>
+                    <path class="st0" d="m342.91,43.32l-6.08,-38.28c-42.43,6.75 -82.64,20.16 -119.51,39.14l17.65,34.55c33.3,-17.16 69.61,-29.3 107.94,-35.41z" id="svg_1"/>
+                    <path class="st1" d="m400.26,38.78c19.39,0 38.43,1.53 56.99,4.48l6.3,-38.21c-20.66,-3.29 -41.84,-5.01 -63.42,-5.01c-21.54,0 -42.68,1.71 -63.3,4.99l6.08,38.28c18.68,-2.97 37.83,-4.53 57.35,-4.53z" id="svg_2"/>
+                    <path class="st1" d="m77.12,238.3l-34.66,-17.54c-18.32,36.5 -31.23,76.18 -37.66,117.99l38.35,6.11c5.79,-37.76 17.44,-73.6 33.97,-106.56z" id="svg_3"/>
+                    <path class="st0" d="m142.99,146.41l-27.42,-27.47c-29.39,29.75 -54.14,64.08 -73.1,101.82l34.66,17.54c17.08,-34.05 39.38,-65.03 65.86,-91.89z" id="svg_4"/>
+                    <path class="st1" d="m234.97,78.73l-17.65,-34.55c-37.82,19.47 -72.13,44.79 -101.75,74.76l27.42,27.47c26.76,-27.13 57.78,-50.06 91.98,-67.68z" id="svg_5"/>
+                    <path class="st0" d="m565.42,78.66l17.52,-34.49c-36.84,-18.96 -77,-32.37 -119.39,-39.12l-6.3,38.21c38.41,6.09 74.8,18.22 108.17,35.4z" id="svg_6"/>
+                    <path class="st1" d="m657.39,146.28l27.29,-27.34c-29.61,-29.97 -63.93,-55.29 -101.75,-74.76l-17.52,34.49c34.2,17.59 65.22,40.49 91.98,67.61z" id="svg_7"/>
+                    <path class="st1" d="m757.61,346.46l38.11,-5.98c-6.25,-41.89 -18.99,-81.65 -37.18,-118.24l-34.45,17.43c16.4,33.06 27.89,68.97 33.52,106.79z" id="svg_8"/>
+                    <path class="st0" d="m761.57,400.09c0,19.93 -1.62,39.48 -4.72,58.53l38.08,6.07c3.42,-21.04 5.2,-42.63 5.2,-64.64c0,-20.24 -1.51,-40.12 -4.41,-59.55l-38.11,5.98c2.6,17.48 3.96,35.39 3.96,53.61z" id="svg_9"/>
+                    <path class="st0" d="m724.1,239.68l34.45,-17.43c-19.05,-38.34 -44.08,-73.18 -73.86,-103.32l-27.29,27.34c26.89,27.25 49.5,58.76 66.7,93.41z" id="svg_10"/>
+                    <path class="st1" d="m146.91,657.67l-27.38,27.43c29.56,29.1 63.63,53.64 101.07,72.48l17.54,-34.53c-33.79,-16.99 -64.54,-39.12 -91.23,-65.38z" id="svg_11"/>
+                    <path class="st1" d="m563.79,722.35l17.56,34.38c36.77,-18.72 70.25,-42.95 99.37,-71.62l-27.25,-27.3c-26.29,25.83 -56.51,47.67 -89.68,64.54z" id="svg_12"/>
+                    <path class="st0" d="m456.19,757.08l6.06,38.16c42.26,-6.59 82.32,-19.79 119.11,-38.52l-17.56,-34.38c-33.25,16.91 -69.44,28.81 -107.61,34.74z" id="svg_13"/>
+                    <path class="st1" d="m400.26,761.39c-20.62,0 -40.83,-1.73 -60.51,-5.05l-6.29,38.17c21.68,3.64 43.95,5.53 66.67,5.53c21.13,0 41.87,-1.64 62.11,-4.8l-6.06,-38.16c-18.22,2.84 -36.9,4.31 -55.92,4.31z" id="svg_14"/>
+                    <path class="st1" d="m756.84,458.62c-6.12,37.59 -18.05,73.24 -34.82,105.99l34.41,17.41c18.55,-36.26 31.73,-75.72 38.49,-117.33l-38.08,-6.07z" id="svg_15"/>
+                    <path class="st0" d="m653.47,657.81l27.25,27.3c30.42,-29.95 56.08,-64.72 75.71,-103.09l-34.41,-17.41c-17.78,34.7 -41.01,66.14 -68.55,93.2z" id="svg_16"/>
+                    <path class="st0" d="m238.13,723.05l-17.54,34.53c34.99,17.61 72.92,30.23 112.86,36.93l6.29,-38.17c-35.94,-6.06 -70.09,-17.44 -101.61,-33.29z" id="svg_17"/>
+                    <path class="st1" d="m43.64,458.41l-38.35,6.01c6.85,42.31 20.33,82.39 39.34,119.15l34.62,-17.52c-17.2,-33.2 -29.4,-69.42 -35.61,-107.64z" id="svg_18"/>
+                    <path class="st0" d="m79.25,566.05l-34.62,17.52c19.53,37.75 44.89,71.99 74.9,101.53l27.38,-27.43c-27.1,-26.65 -50.01,-57.55 -67.66,-91.62z" id="svg_19"/>
+                    <path class="st0" d="m38.96,400.09c0,-18.78 1.43,-37.22 4.19,-55.22l-38.35,-6.12c-3.07,19.98 -4.67,40.45 -4.67,61.29c0,21.92 1.77,43.42 5.16,64.38l38.35,-6.01c-3.08,-18.99 -4.68,-38.47 -4.68,-58.32z" id="svg_20"/>
+                    <path d="m286.02,178.65l-51.05,-99.92c-34.2,17.62 -65.21,40.55 -91.97,67.68l79.26,79.4c18.51,-18.91 40.02,-34.89 63.76,-47.16z" id="svg_21"/>
+                    <path class="st2" d="m360.49,154.13l-17.58,-110.81c-38.32,6.11 -74.64,18.25 -107.94,35.41l51.05,99.92c22.97,-11.88 48.02,-20.28 74.47,-24.52z" id="svg_22"/>
+                    <path d="m400.26,150.96c13.18,0 26.12,1.03 38.75,3.01l18.24,-110.7c-18.57,-2.94 -37.6,-4.48 -56.99,-4.48c-19.52,0 -38.68,1.55 -57.36,4.53l17.59,110.81c12.95,-2.08 26.23,-3.17 39.77,-3.17z" id="svg_23"/>
+                    <path class="st2" d="m151.13,400.09c0,-12.77 0.96,-25.31 2.82,-37.56l-110.8,-17.66c-2.76,18 -4.19,36.44 -4.19,55.22c0,19.86 1.61,39.33 4.69,58.32l110.85,-17.38c-2.2,-13.33 -3.37,-27 -3.37,-40.94z" id="svg_24"/>
+                    <path d="m177.25,288.96l-100.13,-50.66c-16.53,32.96 -28.18,68.8 -33.97,106.57l110.8,17.66c3.94,-26.07 11.93,-50.81 23.3,-73.57z" id="svg_25"/>
+                    <path class="st2" d="m222.25,225.82l-79.26,-79.4c-26.48,26.85 -48.79,57.83 -65.87,91.89l100.12,50.66c11.68,-23.39 26.92,-44.67 45.01,-63.15z" id="svg_26"/>
+                    <path d="m646.76,363.84l110.85,-17.38c-5.63,-37.82 -17.11,-73.74 -33.51,-106.78l-100.13,50.68c11.18,22.76 19,47.47 22.79,73.48z" id="svg_27"/>
+                    <path class="st2" d="m623.97,290.36l100.13,-50.68c-17.2,-34.66 -39.8,-66.16 -66.7,-93.41l-79.26,79.4c18.51,18.89 34.04,40.7 45.83,64.69z" id="svg_28"/>
+                    <path class="st2" d="m514.61,178.7l50.81,-100.04c-33.37,-17.18 -69.76,-29.32 -108.17,-35.4l-18.24,110.7c26.87,4.2 52.3,12.69 75.6,24.74z" id="svg_29"/>
+                    <path d="m578.13,225.68l79.26,-79.4c-26.76,-27.11 -57.78,-50.01 -91.97,-67.61l-50.81,100.03c23.64,12.24 45.06,28.15 63.52,46.98z" id="svg_30"/>
+                    <path class="st2" d="m574.21,578.41l79.26,79.4c27.54,-27.06 50.77,-58.51 68.55,-93.21l-100.12,-50.65c-12.37,24.02 -28.53,45.77 -47.69,64.46z" id="svg_31"/>
+                    <path class="st2" d="m438.6,646.28l17.59,110.8c38.17,-5.93 74.37,-17.84 107.6,-34.74l-51.05,-99.92c-22.91,11.62 -47.84,19.8 -74.14,23.86z" id="svg_32"/>
+                    <path d="m512.74,622.43l51.05,99.92c33.17,-16.87 63.4,-38.71 89.68,-64.54l-79.26,-79.4c-18.05,17.61 -38.76,32.51 -61.47,44.02z" id="svg_33"/>
+                    <path class="st2" d="m757.61,346.46l-110.85,17.38c1.72,11.83 2.63,23.93 2.63,36.24c0,13.92 -1.16,27.57 -3.36,40.87l110.81,17.66c3.1,-19.05 4.72,-38.6 4.72,-58.53c0.01,-18.21 -1.35,-36.12 -3.95,-53.62z" id="svg_34"/>
+                    <path d="m621.9,513.95l100.12,50.66c16.78,-32.75 28.7,-68.4 34.82,-105.99l-110.81,-17.66c-4.27,25.89 -12.52,50.44 -24.13,72.99z" id="svg_35"/>
+                    <path d="m154.5,441.03l-110.86,17.38c6.2,38.23 18.41,74.44 35.61,107.64l100.12,-50.67c-11.98,-22.92 -20.5,-47.94 -24.87,-74.35z" id="svg_36"/>
+                    <path class="st2" d="m179.37,515.38l-100.12,50.67c17.65,34.07 40.56,64.97 67.66,91.62l79.26,-79.4c-18.72,-18.29 -34.56,-39.5 -46.8,-62.89z" id="svg_37"/>
+                    <path d="m226.17,578.27l-79.26,79.4c26.69,26.25 57.44,48.39 91.22,65.38l50.81,-100.05c-23.22,-11.61 -44.38,-26.76 -62.77,-44.73z" id="svg_38"/>
+                    <path d="m400.26,649.22c-14.41,0 -28.53,-1.24 -42.27,-3.59l-18.24,110.71c19.68,3.32 39.89,5.05 60.51,5.05c19.02,0 37.7,-1.47 55.93,-4.31l-17.59,-110.8c-12.5,1.93 -25.3,2.94 -38.34,2.94z" id="svg_39"/>
+                    <path class="st2" d="m288.95,623.01l-50.81,100.05c31.51,15.85 65.66,27.22 101.62,33.29l18.24,-110.72c-24.42,-4.17 -47.61,-11.9 -69.05,-22.62z" id="svg_40"/>
+                    <path class="st1" d="m303.23,212.34l-17.21,-33.69c-23.74,12.27 -45.24,28.25 -63.76,47.17l26.72,26.77c15.74,-16.15 34.04,-29.78 54.25,-40.25z" id="svg_41"/>
+                    <path class="st1" d="m191.87,435.17l-37.37,5.86c4.37,26.42 12.89,51.43 24.88,74.35l33.76,-17.09c-10.24,-19.45 -17.52,-40.69 -21.27,-63.12z" id="svg_42"/>
+                    <path class="st0" d="m248.98,252.59l-26.72,-26.77c-18.1,18.48 -33.33,39.76 -45.01,63.14l33.75,17.08c9.85,-19.78 22.71,-37.79 37.98,-53.45z" id="svg_43"/>
+                    <path class="st0" d="m188.96,400.09c0,-10.74 0.81,-21.3 2.35,-31.61l-37.36,-5.96c-1.85,12.25 -2.82,24.79 -2.82,37.56c0,13.95 1.16,27.62 3.37,40.94l37.37,-5.86c-1.91,-11.4 -2.91,-23.12 -2.91,-35.07z" id="svg_44"/>
+                    <path class="st1" d="m211,306.04l-33.76,-17.08c-11.36,22.76 -19.36,47.5 -23.3,73.56l37.36,5.96c3.33,-22.12 10.08,-43.12 19.7,-62.44z" id="svg_45"/>
+                    <path class="st0" d="m366.42,191.49l-5.93,-37.36c-26.45,4.24 -51.5,12.64 -74.48,24.52l17.21,33.69c19.5,-10.09 40.76,-17.23 63.2,-20.85z" id="svg_46"/>
+                    <path class="st1" d="m400.26,188.78c11.09,0 21.97,0.86 32.6,2.5l6.15,-37.33c-12.63,-1.97 -25.57,-3.01 -38.75,-3.01c-13.54,0 -26.82,1.1 -39.77,3.17l5.93,37.36c11.02,-1.75 22.32,-2.69 33.84,-2.69z" id="svg_47"/>
+                    <path class="st0" d="m590.21,307.44l33.76,-17.08c-11.79,-23.99 -27.32,-45.8 -45.84,-64.68l-26.72,26.77c15.69,16.06 28.84,34.6 38.8,54.99z" id="svg_48"/>
+                    <path class="st1" d="m551.41,252.45l26.72,-26.77c-18.46,-18.83 -39.88,-34.74 -63.52,-46.97l-17.13,33.73c20.08,10.42 38.26,23.97 53.93,40.01z" id="svg_49"/>
+                    <path class="st0" d="m497.48,212.44l17.13,-33.73c-23.3,-12.06 -48.73,-20.55 -75.6,-24.74l-6.15,37.33c22.97,3.54 44.72,10.81 64.62,21.14z" id="svg_50"/>
+                    <path class="st0" d="m611.57,400.09c0,11.9 -1,23.56 -2.89,34.91l37.36,5.95c2.2,-13.3 3.36,-26.95 3.36,-40.87c0,-12.31 -0.91,-24.41 -2.63,-36.24l-37.38,5.86c1.42,9.93 2.18,20.07 2.18,30.39z" id="svg_51"/>
+                    <path class="st0" d="m547.49,551.64l26.72,26.77c19.16,-18.69 35.33,-40.44 47.69,-64.46l-33.76,-17.08c-10.54,20.42 -24.32,38.9 -40.65,54.77z" id="svg_52"/>
+                    <path class="st1" d="m588.14,496.87l33.76,17.08c11.61,-22.55 19.86,-47.1 24.13,-72.99l-37.35,-5.96c-3.65,21.95 -10.68,42.76 -20.54,61.87z" id="svg_53"/>
+                    <path class="st1" d="m590.21,307.44c9.43,19.29 15.99,40.23 19.17,62.26l37.38,-5.86c-3.79,-26.02 -11.6,-50.73 -22.79,-73.49l-33.76,17.09z" id="svg_54"/>
+                    <path class="st1" d="m495.52,588.74l17.21,33.69c22.72,-11.51 43.42,-26.41 61.47,-44.02l-26.72,-26.77c-15.27,14.84 -32.77,27.39 -51.96,37.1z" id="svg_55"/>
+                    <path class="st0" d="m432.67,608.92l5.93,37.36c26.3,-4.06 51.23,-12.24 74.14,-23.85l-17.21,-33.69c-19.43,9.82 -40.57,16.75 -62.86,20.18z" id="svg_56"/>
+                    <path class="st1" d="m252.89,551.5l-26.72,26.77c18.39,17.97 39.55,33.11 62.78,44.74l17.13,-33.73c-19.67,-9.82 -37.6,-22.6 -53.19,-37.78z" id="svg_57"/>
+                    <path class="st0" d="m306.08,589.28l-17.13,33.73c21.44,10.73 44.64,18.45 69.05,22.62l6.15,-37.33c-20.52,-3.53 -40.03,-10.03 -58.07,-19.02z" id="svg_58"/>
+                    <path class="st0" d="m213.13,498.29l-33.76,17.09c12.24,23.4 28.08,44.61 46.8,62.89l26.72,-26.77c-15.89,-15.47 -29.35,-33.41 -39.76,-53.21z" id="svg_59"/>
+                    <path class="st1" d="m400.26,611.39c-12.31,0 -24.38,-1.07 -36.11,-3.09l-6.15,37.33c13.74,2.35 27.86,3.59 42.27,3.59c13.04,0 25.84,-1.01 38.34,-2.94l-5.93,-37.36c-10.57,1.62 -21.4,2.47 -32.42,2.47z" id="svg_60"/>
+                    <path d="m302.58,352.38l-91.58,-46.34c-9.62,19.32 -16.37,40.32 -19.69,62.44l101.35,16.15c1.63,-11.42 5.03,-22.27 9.92,-32.25z" id="svg_61"/>
+                    <path class="st2" d="m321.47,325.21l-72.49,-72.62c-15.27,15.66 -28.12,33.67 -37.97,53.45l91.57,46.33c4.9,-10.01 11.29,-19.16 18.89,-27.16z" id="svg_62"/>
+                    <path class="st2" d="m291.57,400.09c0,-5.25 0.38,-10.4 1.1,-15.45l-101.35,-16.15c-1.55,10.31 -2.35,20.86 -2.35,31.61c0,11.95 1.01,23.67 2.92,35.08l101.38,-15.9c-1.13,-6.24 -1.7,-12.65 -1.7,-19.19z" id="svg_63"/>
+                    <path d="m293.25,419.27l-101.38,15.9c3.75,22.44 11.03,43.67 21.26,63.12l91.58,-46.35c-5.46,-10.04 -9.38,-21.03 -11.46,-32.67z" id="svg_64"/>
+                    <path d="m349.92,303.73l-46.69,-91.39c-20.21,10.47 -38.51,24.1 -54.25,40.25l72.49,72.62c8.2,-8.63 17.81,-15.9 28.45,-21.48z" id="svg_65"/>
+                    <path d="m478.92,325.07l72.49,-72.62c-15.66,-16.03 -33.85,-29.59 -53.93,-40.01l-46.48,91.5c10.42,5.52 19.85,12.67 27.92,21.13z" id="svg_66"/>
+                    <path class="st2" d="m451,303.94l46.48,-91.51c-19.9,-10.33 -41.64,-17.59 -64.61,-21.15l-16.69,101.27c12.41,1.83 24.14,5.75 34.82,11.39z" id="svg_67"/>
+                    <path d="m400.26,291.39c5.41,0 10.72,0.4 15.91,1.16l16.69,-101.27c-10.63,-1.65 -21.51,-2.5 -32.6,-2.5c-11.52,0 -22.82,0.94 -33.84,2.71l16.09,101.35c5.78,-0.95 11.7,-1.45 17.75,-1.45z" id="svg_68"/>
+                    <path class="st2" d="m304.71,451.94l-91.58,46.35c10.41,19.8 23.87,37.74 39.76,53.21l72.49,-72.62c-8.21,-7.81 -15.21,-16.9 -20.67,-26.94z" id="svg_69"/>
+                    <path class="st2" d="m382.51,292.84l-16.09,-101.35c-22.44,3.61 -43.7,10.75 -63.19,20.85l46.69,91.39c10.04,-5.25 21.01,-8.98 32.59,-10.89z" id="svg_70"/>
+                    <path d="m496.56,450.53l91.58,46.34c9.86,-19.11 16.89,-39.92 20.54,-61.87l-101.34,-16.15c-1.96,11.25 -5.65,21.9 -10.78,31.68z" id="svg_71"/>
+                    <path class="st2" d="m508.96,400.09c0,6.4 -0.56,12.67 -1.62,18.76l101.34,16.15c1.89,-11.36 2.89,-23.02 2.89,-34.91c0,-10.32 -0.75,-20.46 -2.18,-30.38l-101.39,15.9c0.62,4.73 0.96,9.56 0.96,14.48z" id="svg_72"/>
+                    <path d="m507.99,385.6l101.39,-15.9c-3.17,-22.04 -9.74,-42.97 -19.17,-62.26l-91.59,46.35c4.66,9.89 7.88,20.58 9.37,31.81z" id="svg_73"/>
+                    <path d="m325.38,478.88l-72.49,72.62c15.59,15.18 33.52,27.96 53.19,37.78l46.47,-91.5c-10.01,-4.91 -19.17,-11.3 -27.17,-18.9z" id="svg_74"/>
+                    <path class="st2" d="m478.92,325.07c8.02,8.41 14.7,18.1 19.71,28.73l91.59,-46.35c-9.96,-20.39 -23.12,-38.94 -38.81,-55l-72.49,72.62z" id="svg_75"/>
+                    <path class="st2" d="m416.59,507.56l16.09,101.36c22.29,-3.43 43.43,-10.35 62.85,-20.18l-46.69,-91.39c-9.98,4.98 -20.82,8.49 -32.25,10.21z" id="svg_76"/>
+                    <path class="st2" d="m474.99,479.01l72.49,72.63c16.33,-15.87 30.11,-34.35 40.65,-54.77l-91.58,-46.34c-5.59,10.66 -12.89,20.28 -21.56,28.48z" id="svg_77"/>
+                    <path class="st2" d="m352.55,497.77l-46.47,91.5c18.04,9 37.55,15.49 58.07,19.03l16.68,-101.26c-9.96,-1.79 -19.45,-4.95 -28.28,-9.27z" id="svg_78"/>
+                    <path d="m400.26,508.78c-6.63,0 -13.13,-0.6 -19.43,-1.73l-16.68,101.25c11.74,2.02 23.8,3.09 36.11,3.09c11.02,0 21.84,-0.85 32.41,-2.47l-16.09,-101.36c-5.32,0.8 -10.77,1.22 -16.32,1.22z" id="svg_79"/>
+                    <path d="m448.83,497.34l46.69,91.39c19.19,-9.71 36.69,-22.26 51.96,-37.1l-72.49,-72.63c-7.73,7.34 -16.54,13.53 -26.16,18.34z" id="svg_80"/>
+                    <path class="st0" d="m507.99,385.6c-1.5,-11.24 -4.71,-21.93 -9.37,-31.8c-5.01,-10.63 -11.69,-20.32 -19.71,-28.73c-8.07,-8.46 -17.49,-15.61 -27.92,-21.12c-10.68,-5.65 -22.41,-9.57 -34.82,-11.39c-5.2,-0.76 -10.51,-1.16 -15.91,-1.16c-6.05,0 -11.98,0.5 -17.75,1.45c-11.58,1.9 -22.55,5.63 -32.59,10.89c-10.64,5.57 -20.25,12.85 -28.45,21.48c-7.6,8 -13.99,17.15 -18.89,27.16c-4.89,9.99 -8.29,20.84 -9.91,32.26c-0.72,5.05 -1.1,10.21 -1.1,15.45c0,6.55 0.58,12.96 1.69,19.18c2.07,11.64 6,22.63 11.46,32.67c5.46,10.04 12.46,19.12 20.68,26.93c8,7.6 17.15,14 27.17,18.9c8.82,4.32 18.31,7.48 28.28,9.27c6.3,1.14 12.8,1.73 19.43,1.73c5.55,0 11,-0.42 16.32,-1.22c11.43,-1.72 22.27,-5.23 32.25,-10.22c9.62,-4.81 18.43,-11.01 26.16,-18.33c8.66,-8.21 15.97,-17.82 21.57,-28.48c5.13,-9.78 8.82,-20.43 10.78,-31.68c1.06,-6.1 1.62,-12.36 1.62,-18.76c-0.02,-4.91 -0.36,-9.74 -0.99,-14.48zm-56.45,42.15c-3.17,5.86 -7.31,11.11 -12.21,15.54c-4.02,3.63 -8.54,6.71 -13.46,9.12c-5.33,2.61 -11.11,4.44 -17.2,5.32c-2.75,0.4 -5.56,0.61 -8.42,0.61c-3.84,0 -7.59,-0.38 -11.23,-1.09c-4.78,-0.93 -9.35,-2.45 -13.63,-4.47c-5.27,-2.49 -10.11,-5.74 -14.37,-9.62c-4.44,-4.05 -8.24,-8.78 -11.27,-14.02c-3.12,-5.41 -5.4,-11.36 -6.65,-17.69c-0.73,-3.68 -1.12,-7.48 -1.12,-11.37c0,-2.55 0.18,-5.05 0.5,-7.51c0.79,-6.16 2.54,-12.02 5.1,-17.42c2.47,-5.21 5.69,-10 9.52,-14.23c4.49,-4.94 9.81,-9.1 15.75,-12.27c5.4,-2.88 11.3,-4.93 17.54,-5.99c3.2,-0.55 6.49,-0.85 9.85,-0.85c2.62,0 5.18,0.19 7.71,0.52c7.23,0.96 14.04,3.22 20.18,6.58c5.68,3.1 10.78,7.12 15.11,11.86c4.24,4.64 7.74,9.98 10.31,15.81c2.32,5.25 3.88,10.9 4.55,16.82c0.25,2.19 0.39,4.41 0.39,6.67c0,3.7 -0.36,7.31 -1.02,10.82c-1.09,6 -3.12,11.67 -5.93,16.86z" id="svg_81"/>
+                    <polygon id="svg_82" points="399.89,403.77 397.66,404.9 397.35,406.78 400.12,404.01 "/>
+                    <polygon id="svg_83" points="400.12,404.01 397.35,406.78 396.67,410.91 400.16,404.05 400.16,404.04 "/>
+                    <polygon id="svg_84" points="401.63,402.5 402.02,402.69 402.96,402.21 402.51,402.14 401.89,402.24 "/>
+                    <polygon id="svg_85" points="398.83,402.72 398,402.85 397.66,404.9 399.89,403.77 "/>
+                    <polygon id="svg_86" points="399.92,402.55 399.79,401.71 398.23,401.46 398.14,402.02 398.83,402.72 "/>
+                    <polygon id="svg_87" points="398.14,402.02 398,402.85 398.83,402.72 "/>
+                    <polygon id="svg_88" points="400.16,404.04 402.22,406.11 400.8,403.33 400.24,403.89 "/>
+                    <polygon id="svg_89" points="401.3,402.33 401.01,402.38 400.66,403.05 400.79,403.31 400.83,403.29 401.63,402.5 "/>
+                    <polygon id="svg_90" points="400.15,403.98 400.16,404.04 400.16,404.04 400.24,403.89 "/>
+                    <polygon id="svg_91" points="400.83,403.29 402.02,402.69 401.63,402.5 "/>
+                    <polygon id="svg_92" points="397.46,401.34 398.14,402.02 398.23,401.46 "/>
+                    <polygon id="svg_93" points="400.8,403.33 400.83,403.29 400.79,403.31 "/>
+                    <polygon id="svg_94" points="400.44,403.49 400.24,403.89 400.8,403.33 400.79,403.31 "/>
+                    <polygon id="svg_95" points="400.16,404.05 400.16,404.04 400.16,404.04 "/>
+                    <polygon id="svg_96" points="401.01,402.38 400.37,402.48 400.66,403.05 "/>
+                    <polygon id="svg_97" points="401.89,402.24 401.3,402.33 401.63,402.5 "/>
+                    <polygon id="svg_98" points="400.79,403.31 400.66,403.05 400.44,403.49 "/>
+                    <polygon id="svg_99" points="400.16,404.04 400.15,403.98 400.12,404.01 "/>
+                    <polygon id="svg_100" points="398.33,400.83 395.53,399.41 397.46,401.34 398.23,401.46 "/>
+                    <polygon id="svg_101" points="401.09,402.22 401.01,402.38 401.3,402.33 "/>
+                    <polygon id="svg_102" points="400.1,403.67 400.44,403.49 400.66,403.05 400.37,402.48 399.92,402.55 "/>
+                    <polygon id="svg_103" points="400.37,402.48 399.99,401.74 399.79,401.71 399.92,402.55 "/>
+                    <polygon id="svg_104" points="399.79,401.71 399.76,401.55 398.33,400.83 398.23,401.46 "/>
+                    <polygon id="svg_105" points="400.15,403.98 400.24,403.89 400.44,403.49 400.1,403.67 "/>
+                    <polygon id="svg_106" points="399.89,403.77 400.12,404.01 400.15,403.98 400.1,403.67 "/>
+                    <polygon id="svg_107" points="399.92,402.55 398.83,402.72 399.89,403.77 400.1,403.67 "/>
+                    <polygon id="svg_108" points="403.38,402 402.51,402.14 402.96,402.21 "/>
+                    <polygon id="svg_109" points="401.23,401.94 400.21,401.77 401.09,402.22 "/>
+                    <polygon id="svg_110" points="399.94,401.64 399.7,401.17 399.76,401.55 "/>
+                    <polygon id="svg_111" points="400.37,402.48 401.01,402.38 401.09,402.22 400.21,401.77 399.99,401.74 "/>
+                    <polygon id="svg_112" points="399.79,401.71 399.99,401.74 399.94,401.64 399.76,401.55 "/>
+                    <polygon id="svg_113" points="400.21,401.77 399.94,401.64 399.99,401.74 "/>
+                    <polygon id="svg_114" points="401.3,402.33 401.89,402.24 402.06,402.07 401.23,401.94 401.09,402.22 "/>
+                    <polygon id="svg_115" points="402.51,402.14 402.06,402.07 401.89,402.24 "/>
+                    <polygon id="svg_116" points="398.33,400.83 399.76,401.55 399.7,401.17 398.62,399.07 "/>
+                    <polygon id="svg_117" points="399.7,401.17 399,396.77 398.62,399.07 "/>
+                    <path class="st1" d="m458.13,393.42c-0.68,-5.92 -2.24,-11.57 -4.55,-16.82c-2.57,-5.83 -6.07,-11.17 -10.31,-15.81c-4.33,-4.74 -9.43,-8.76 -15.11,-11.86c-6.14,-3.35 -12.95,-5.62 -20.18,-6.58c-2.52,-0.33 -5.09,-0.52 -7.71,-0.52c-3.36,0 -6.64,0.3 -9.85,0.85c-6.24,1.06 -12.15,3.11 -17.54,5.99c-5.94,3.17 -11.26,7.33 -15.75,12.27c-3.83,4.22 -7.05,9.01 -9.52,14.23c-2.56,5.4 -4.31,11.26 -5.1,17.42c-0.32,2.46 -0.5,4.96 -0.5,7.51c0,3.89 0.39,7.69 1.12,11.37c1.25,6.33 3.53,12.28 6.65,17.69c3.02,5.24 6.82,9.98 11.27,14.02c4.26,3.88 9.1,7.13 14.37,9.62c4.28,2.02 8.85,3.54 13.63,4.47c3.63,0.71 7.38,1.09 11.23,1.09c2.86,0 5.67,-0.22 8.42,-0.61c6.09,-0.88 11.88,-2.7 17.2,-5.32c4.91,-2.41 9.44,-5.49 13.46,-9.12c4.9,-4.43 9.04,-9.69 12.21,-15.54c2.81,-5.19 4.83,-10.86 5.96,-16.84c0.66,-3.51 1.02,-7.12 1.02,-10.82c-0.03,-2.28 -0.17,-4.5 -0.42,-6.69z" id="svg_118"/>
+                    <g id="svg_119"><path class="st2" d="m377.86,105.04l0,-2.59l3.31,-3.22c7.97,-7.58 11.57,-11.62 11.62,-16.32c0,-3.17 -1.54,-6.1 -6.19,-6.1c-2.83,0 -5.18,1.44 -6.62,2.64l-1.34,-2.98c2.16,-1.82 5.23,-3.17 8.83,-3.17c6.72,0 9.55,4.61 9.55,9.07c0,5.76 -4.18,10.42 -10.75,16.75l-2.5,2.3l0,0.1l14.02,0l0,3.5l-19.93,0l0,0.02z" id="svg_120"/><path class="st2" d="m423.22,89.11c0,10.61 -3.94,16.47 -10.85,16.47c-6.1,0 -10.22,-5.71 -10.32,-16.03c0,-10.46 4.51,-16.23 10.85,-16.23c6.57,-0.01 10.32,5.85 10.32,15.79zm-16.95,0.48c0,8.11 2.5,12.72 6.34,12.72c4.32,0 6.38,-5.04 6.38,-13.01c0,-7.68 -1.97,-12.72 -6.34,-12.72c-3.69,0 -6.38,4.51 -6.38,13.01z" id="svg_121"/></g>
+                    <g id="svg_122"><path class="st3" d="m492.37,95.56l-0.1,0l-5.42,2.93l-0.82,-3.22l6.82,-3.65l3.6,0l0,31.2l-4.08,0l0,-27.26z" id="svg_123"/></g>
+                    <g id="svg_124"><path class="st2" d="m566.38,141.29l-0.1,0l-5.42,2.93l-0.82,-3.22l6.82,-3.65l3.6,0l0,31.2l-4.08,0l0,-27.26z" id="svg_125"/><path class="st2" d="m581.45,160.63c0,-3.94 2.35,-6.72 6.19,-8.35l-0.05,-0.14c-3.46,-1.63 -4.94,-4.32 -4.94,-7.01c0,-4.94 4.18,-8.3 9.65,-8.3c6.05,0 9.07,3.79 9.07,7.68c0,2.64 -1.3,5.47 -5.14,7.3l0,0.14c3.89,1.54 6.29,4.27 6.29,8.06c0,5.42 -4.66,9.07 -10.61,9.07c-6.53,0 -10.46,-3.89 -10.46,-8.45zm16.8,-0.19c0,-3.79 -2.64,-5.62 -6.86,-6.82c-3.65,1.06 -5.62,3.46 -5.62,6.43c-0.14,3.17 2.26,5.95 6.24,5.95c3.79,0.01 6.24,-2.34 6.24,-5.56zm-11.62,-15.6c0,3.12 2.35,4.8 5.95,5.76c2.69,-0.91 4.75,-2.83 4.75,-5.66c0,-2.5 -1.49,-5.09 -5.28,-5.09c-3.5,0 -5.42,2.3 -5.42,4.99z" id="svg_126"/></g>
+                    <g id="svg_127"><path class="st3" d="m654.12,240.81l0,-8.5l-14.5,0l0,-2.78l13.92,-19.92l4.56,0l0,19.39l4.37,0l0,3.31l-4.37,0l0,8.5l-3.98,0zm0,-11.81l0,-10.42c0,-1.63 0.05,-3.26 0.14,-4.9l-0.14,0c-0.96,1.82 -1.73,3.17 -2.59,4.61l-7.63,10.61l0,0.1l10.22,0z" id="svg_128"/></g>
+                    <g id="svg_129"><path class="st2" d="m674.4,297.8l-0.1,0l-5.42,2.93l-0.82,-3.22l6.82,-3.65l3.6,0l0,31.2l-4.08,0l0,-27.26z" id="svg_130"/><path class="st2" d="m690.86,320.22c1.2,0.77 3.98,1.97 6.91,1.97c5.42,0 7.1,-3.46 7.06,-6.05c-0.05,-4.37 -3.98,-6.24 -8.06,-6.24l-2.35,0l0,-3.17l2.35,0c3.07,0 6.96,-1.58 6.96,-5.28c0,-2.5 -1.58,-4.7 -5.47,-4.7c-2.5,0 -4.9,1.1 -6.24,2.06l-1.1,-3.07c1.63,-1.2 4.8,-2.4 8.16,-2.4c6.14,0 8.93,3.65 8.93,7.44c0,3.22 -1.92,5.95 -5.76,7.34l0,0.1c3.84,0.77 6.96,3.65 6.96,8.02c0,4.99 -3.89,9.36 -11.38,9.36c-3.5,0 -6.58,-1.1 -8.11,-2.11l1.14,-3.27z" id="svg_131"/></g>
+                    <g id="svg_132"><path class="st3" d="m711.69,391.04c-0.86,-0.05 -1.97,0 -3.17,0.19c-6.62,1.1 -10.13,5.95 -10.85,11.09l0.14,0c1.49,-1.97 4.08,-3.6 7.54,-3.6c5.52,0 9.41,3.98 9.41,10.08c0,5.71 -3.89,10.99 -10.37,10.99c-6.67,0 -11.04,-5.18 -11.04,-13.3c0,-6.15 2.21,-10.99 5.28,-14.07c2.59,-2.54 6.05,-4.13 9.99,-4.61c1.25,-0.19 2.3,-0.24 3.07,-0.24l0,3.47zm-1.2,18.01c0,-4.46 -2.54,-7.15 -6.43,-7.15c-2.54,0 -4.9,1.58 -6.05,3.84c-0.29,0.48 -0.48,1.1 -0.48,1.87c0.1,5.14 2.45,8.93 6.87,8.93c3.64,-0.01 6.09,-3.03 6.09,-7.49z" id="svg_133"/></g>
+                    <g id="svg_134"><path class="st2" d="m675.96,486.68l-0.1,0l-5.42,2.93l-0.82,-3.22l6.82,-3.65l3.6,0l0,31.2l-4.08,0l0,-27.26z" id="svg_135"/><path class="st2" d="m712.15,498.01c0,10.61 -3.94,16.46 -10.85,16.46c-6.1,0 -10.22,-5.71 -10.32,-16.03c0,-10.46 4.51,-16.23 10.85,-16.23c6.58,0.01 10.32,5.87 10.32,15.8zm-16.95,0.48c0,8.11 2.5,12.72 6.34,12.72c4.32,0 6.38,-5.04 6.38,-13.01c0,-7.68 -1.97,-12.72 -6.34,-12.72c-3.69,0 -6.38,4.52 -6.38,13.01z" id="svg_136"/></g>
+                    <g id="svg_137"><path class="st3" d="m629.81,571.19l-0.1,0l-5.42,2.93l-0.82,-3.22l6.82,-3.65l3.6,0l0,31.2l-4.08,0l0,-27.26z" id="svg_138"/><path class="st3" d="m663.9,570.81l-11.91,0l-1.2,8.02c0.72,-0.1 1.39,-0.19 2.54,-0.19c2.4,0 4.8,0.53 6.72,1.68c2.45,1.39 4.46,4.08 4.46,8.02c0,6.1 -4.85,10.66 -11.62,10.66c-3.41,0 -6.29,-0.96 -7.78,-1.92l1.06,-3.22c1.3,0.77 3.84,1.73 6.67,1.73c3.98,0 7.39,-2.59 7.39,-6.77c-0.05,-4.03 -2.74,-6.91 -8.98,-6.91c-1.78,0 -3.17,0.19 -4.32,0.34l2.02,-14.98l14.93,0l0,3.54l0.02,0z" id="svg_139"/></g>
+                    <g id="svg_140"><path class="st2" d="m568.17,662.16l0,-2.59l3.31,-3.22c7.97,-7.58 11.57,-11.62 11.62,-16.32c0,-3.17 -1.54,-6.1 -6.19,-6.1c-2.83,0 -5.18,1.44 -6.62,2.64l-1.34,-2.98c2.16,-1.82 5.23,-3.17 8.83,-3.17c6.72,0 9.55,4.61 9.55,9.07c0,5.76 -4.18,10.42 -10.75,16.75l-2.5,2.3l0,0.1l14.02,0l0,3.5l-19.93,0l0,0.02z" id="svg_141"/></g>
+                    <g id="svg_142"><path class="st3" d="m475.5,676.24l-0.1,0l-5.42,2.93l-0.82,-3.22l6.82,-3.65l3.6,0l0,31.2l-4.08,0l0,-27.26z" id="svg_143"/><path class="st3" d="m511.21,672.31l0,2.78l-13.58,28.42l-4.37,0l13.54,-27.6l0,-0.1l-15.27,0l0,-3.5l19.68,0z" id="svg_144"/></g>
+                    <g id="svg_145"><path class="st2" d="m388.81,717.5c1.2,0.77 3.98,1.97 6.91,1.97c5.42,0 7.1,-3.46 7.06,-6.05c-0.05,-4.37 -3.98,-6.24 -8.06,-6.24l-2.35,0l0,-3.17l2.35,0c3.07,0 6.96,-1.58 6.96,-5.28c0,-2.5 -1.58,-4.7 -5.47,-4.7c-2.5,0 -4.9,1.1 -6.24,2.06l-1.1,-3.07c1.63,-1.2 4.8,-2.4 8.16,-2.4c6.14,0 8.93,3.65 8.93,7.44c0,3.22 -1.92,5.95 -5.76,7.34l0,0.1c3.84,0.77 6.96,3.65 6.96,8.02c0,4.99 -3.89,9.36 -11.38,9.36c-3.5,0 -6.58,-1.1 -8.11,-2.11l1.14,-3.27z" id="svg_146"/></g>
+                    <g id="svg_147"><path class="st3" d="m290.44,680.36l-0.1,0l-5.42,2.93l-0.82,-3.22l6.82,-3.65l3.6,0l0,31.2l-4.08,0l0,-27.26z" id="svg_148"/><path class="st3" d="m308.34,704.65c0.91,0.1 1.97,0 3.41,-0.14c2.45,-0.34 4.75,-1.34 6.53,-3.02c2.06,-1.87 3.55,-4.61 4.13,-8.3l-0.14,0c-1.73,2.11 -4.22,3.36 -7.34,3.36c-5.62,0 -9.22,-4.22 -9.22,-9.55c0,-5.9 4.27,-11.09 10.66,-11.09s10.32,5.19 10.32,13.15c0,6.86 -2.3,11.66 -5.38,14.64c-2.4,2.35 -5.71,3.79 -9.07,4.18c-1.54,0.24 -2.88,0.29 -3.89,0.24l0,-3.47l-0.01,0zm1.54,-17.95c0,3.89 2.35,6.62 6,6.62c2.83,0 5.04,-1.39 6.14,-3.26c0.24,-0.38 0.38,-0.86 0.38,-1.54c0,-5.33 -1.97,-9.41 -6.38,-9.41c-3.6,0 -6.14,3.17 -6.14,7.59z" id="svg_149"/></g>
+                    <g id="svg_150"><path class="st2" d="m236.29,631.48l0,2.78l-13.58,28.42l-4.37,0l13.54,-27.6l0,-0.1l-15.27,0l0,-3.5l19.68,0z" id="svg_151"/></g>
+                    <g id="svg_152"><path class="st3" d="m137.01,571.19l-0.1,0l-5.42,2.93l-0.82,-3.22l6.82,-3.65l3.6,0l0,31.2l-4.08,0l0,-27.26z" id="svg_153"/><path class="st3" d="m170.27,570.23c-0.86,-0.05 -1.97,0 -3.17,0.19c-6.62,1.1 -10.13,5.95 -10.85,11.09l0.14,0c1.49,-1.97 4.08,-3.6 7.54,-3.6c5.52,0 9.41,3.98 9.41,10.08c0,5.71 -3.89,10.99 -10.37,10.99c-6.67,0 -11.04,-5.18 -11.04,-13.3c0,-6.14 2.21,-10.99 5.28,-14.07c2.59,-2.54 6.05,-4.13 9.98,-4.61c1.25,-0.19 2.3,-0.24 3.07,-0.24l0,3.47l0.01,0zm-1.2,18c0,-4.46 -2.54,-7.15 -6.43,-7.15c-2.54,0 -4.9,1.58 -6.05,3.84c-0.29,0.48 -0.48,1.1 -0.48,1.87c0.1,5.14 2.45,8.93 6.86,8.93c3.66,0 6.1,-3.02 6.1,-7.49z" id="svg_154"/></g>
+                    <g id="svg_155"><path class="st2" d="m93.2,504.03c0,-3.94 2.35,-6.72 6.19,-8.35l-0.05,-0.14c-3.46,-1.63 -4.94,-4.32 -4.94,-7.01c0,-4.94 4.18,-8.3 9.65,-8.3c6.05,0 9.07,3.79 9.07,7.68c0,2.64 -1.3,5.47 -5.14,7.3l0,0.14c3.89,1.54 6.29,4.27 6.29,8.06c0,5.42 -4.66,9.07 -10.61,9.07c-6.53,0 -10.46,-3.89 -10.46,-8.45zm16.8,-0.19c0,-3.79 -2.64,-5.62 -6.86,-6.82c-3.65,1.06 -5.62,3.46 -5.62,6.43c-0.14,3.17 2.26,5.95 6.24,5.95c3.79,0 6.24,-2.35 6.24,-5.56zm-11.62,-15.6c0,3.12 2.35,4.8 5.95,5.76c2.69,-0.91 4.75,-2.83 4.75,-5.66c0,-2.5 -1.49,-5.09 -5.28,-5.09c-3.5,-0.01 -5.42,2.3 -5.42,4.99z" id="svg_156"/></g>
+                    <g id="svg_157"><path class="st3" d="m78.75,391.58l-0.1,0l-5.42,2.93l-0.82,-3.22l6.82,-3.65l3.6,0l0,31.2l-4.08,0l0,-27.26z" id="svg_158"/><path class="st3" d="m103.37,391.58l-0.1,0l-5.42,2.93l-0.82,-3.22l6.82,-3.65l3.6,0l0,31.2l-4.08,0l0,-27.26z" id="svg_159"/></g>
+                    <g id="svg_160"><path class="st2" d="m90.58,297.8l-0.1,0l-5.42,2.93l-0.82,-3.22l6.82,-3.65l3.6,0l0,31.2l-4.08,0l0,-27.26z" id="svg_161"/><path class="st2" d="m119.09,325.07l0,-8.5l-14.5,0l0,-2.78l13.92,-19.92l4.56,0l0,19.39l4.37,0l0,3.31l-4.37,0l0,8.5l-3.98,0zm0,-11.81l0,-10.42c0,-1.63 0.05,-3.26 0.14,-4.9l-0.14,0c-0.96,1.82 -1.73,3.17 -2.59,4.61l-7.63,10.61l0,0.1l10.22,0z" id="svg_162"/></g>
+                    <g id="svg_163"><path class="st3" d="m134.33,228.71c0.91,0.1 1.97,0 3.41,-0.14c2.45,-0.34 4.75,-1.34 6.53,-3.02c2.06,-1.87 3.55,-4.61 4.13,-8.3l-0.14,0c-1.73,2.11 -4.22,3.36 -7.34,3.36c-5.62,0 -9.22,-4.22 -9.22,-9.55c0,-5.9 4.27,-11.09 10.66,-11.09c6.38,0 10.32,5.18 10.32,13.15c0,6.86 -2.3,11.67 -5.38,14.64c-2.4,2.35 -5.71,3.79 -9.07,4.18c-1.54,0.24 -2.88,0.29 -3.89,0.24l0,-3.47l-0.01,0zm1.54,-17.96c0,3.89 2.35,6.62 6,6.62c2.83,0 5.04,-1.39 6.14,-3.26c0.24,-0.38 0.38,-0.86 0.38,-1.54c0,-5.33 -1.97,-9.41 -6.38,-9.41c-3.6,0.01 -6.14,3.18 -6.14,7.59z" id="svg_164"/></g>
+                    <g id="svg_165"><path class="st2" d="m200.2,139.81l-0.1,0l-5.42,2.93l-0.82,-3.22l6.82,-3.65l3.6,0l0,31.2l-4.08,0l0,-27.26z" id="svg_166"/><path class="st2" d="m215.66,167.08l0,-2.59l3.31,-3.22c7.97,-7.58 11.57,-11.62 11.62,-16.32c0,-3.17 -1.54,-6.1 -6.19,-6.1c-2.83,0 -5.18,1.44 -6.62,2.64l-1.34,-2.98c2.16,-1.82 5.23,-3.17 8.83,-3.17c6.72,0 9.55,4.61 9.55,9.07c0,5.76 -4.18,10.42 -10.75,16.75l-2.5,2.3l0,0.1l14.02,0l0,3.5l-19.93,0l0,0.02z" id="svg_167"/></g>
+                    <g id="svg_168"><path class="st3" d="m312.96,97.75l-11.9,0l-1.2,8.02c0.72,-0.1 1.39,-0.19 2.54,-0.19c2.4,0 4.8,0.53 6.72,1.68c2.45,1.39 4.46,4.08 4.46,8.02c0,6.1 -4.85,10.66 -11.62,10.66c-3.41,0 -6.29,-0.96 -7.78,-1.92l1.06,-3.22c1.3,0.77 3.84,1.73 6.67,1.73c3.98,0 7.39,-2.59 7.39,-6.77c-0.05,-4.03 -2.74,-6.91 -8.98,-6.91c-1.78,0 -3.17,0.19 -4.32,0.34l2.02,-14.98l14.93,0l0,3.54l0.01,0z" id="svg_169"/></g>
+                </g>
+                </svg>
+        </div>
+    </div>
+
+    <div class="gap-8 columns-3 mt-10">
+        <div class="text-6xl text-gray-50 p-14 bg-gray-200 border rounded-lg border-gray-700">60</div>
+        <div class="text-6xl text-gray-50 p-14 bg-gray-200 border rounded-lg border-gray-700">60</div>
+        <div class="text-6xl text-gray-50 p-14 bg-gray-200 border rounded-lg border-gray-700">60</div>
+    </div>
+
+    <button class="p-6 bg-slate-700 rounded-lg text-2xl m-10">Submit Score 180</button>
+
+</div>
+
+<!-- Modal -->
+<button class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button" data-modal-toggle="popup-modal">
+    Toggle modal
+</button>
+
+<div id="popup-modal" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 md:inset-0 h-modal md:h-full">
+    <div class="relative p-4 w-full max-w-md h-full md:h-auto">
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <button type="button" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white" data-modal-toggle="popup-modal">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+            </button>
+            <div class="p-6 text-center">
+                <svg class="mx-auto mb-4 w-14 h-14 text-gray-400 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you sure you want to delete this product?</h3>
+                <button data-modal-toggle="popup-modal" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">
+                    Yes, I'm sure
+                </button>
+                <button data-modal-toggle="popup-modal" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">No, cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="js/app_functions.js"></script>
+<script src="js/app_user_interface.js"></script>
+<script src="js/app_classes.js"></script>
+<script src="js/app_easy_score.js"></script>
+
+<script>
+    const match = new Match();
+    match.coinToss(match.playerA);
+</script>
+
+</body>
+</html>
