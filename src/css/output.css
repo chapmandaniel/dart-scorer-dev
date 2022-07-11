@@ -1446,7 +1446,17 @@ video {
   }
 }
 
+@media (min-width: 768px) {
+  .md\:w-full {
+    width: 100%;
+  }
+}
+
 @media (min-width: 1024px) {
+  .lg\:w-1\/2 {
+    width: 50%;
+  }
+
   .lg\:max-w-3xl {
     max-width: 48rem;
   }
