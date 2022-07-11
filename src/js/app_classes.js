@@ -38,8 +38,8 @@ class Match{
         this.players = [];      //player 1 and player 2 array for order of turns after coin toss, winner gets [0] and loser gets [1]
         this.coinTossWinner = null;     //the winner of the coin toss to go first
         this.atTheOche = null;        //the player who is at the toe line (oche)
-
     }
+
 
     coinToss(playsFirst){         // set the coin toss winner
 
@@ -104,6 +104,8 @@ class Match{
 
 
     startNewLeg(message = ""){  // method to start a new leg
+        p1legs.innerHTML = match.players[0].legs;
+        p2legs.innerHTML = match.players[1].legs;
         this.players.forEach(function(player){player.score = match.scoreToWin});
         this.legVisits = [];
         this.upFirst();  // set the player who goes first
@@ -119,7 +121,6 @@ class Match{
     }
 
     calculateAverages() {
-        console.log("Calculating averages...");
 
         for(let i = 0; i < 2; i++){
             match.players[i].legAverage = function(){

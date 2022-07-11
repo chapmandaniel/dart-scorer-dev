@@ -4,16 +4,14 @@
  ---------------------------------------------------------------------------------*/
 
 function updateInterface(message = ""){
-    console.log("update interface");
-    player1NameDiv.innerHTML = match.players[0].name;
-    player2NameDiv.innerHTML = match.players[1].name;
     player1ScoreDiv.innerHTML = match.players[0].score;
     player2ScoreDiv.innerHTML = match.players[1].score;
-    p1legs.innerHTML = match.players[0].legs;
-    p2legs.innerHTML = match.players[1].legs;
+    match.atTheOche === match.players[0] ? player1NameDiv.classList.add('bg-active') : player1NameDiv.classList.remove('bg-active');
+    match.atTheOche === match.players[1] ? player2NameDiv.classList.add('bg-active') : player2NameDiv.classList.remove('bg-active');
     match.calculateAverages();
     updateFinishButtons();
     turnLogManager();
+
 }
 
 
@@ -39,9 +37,8 @@ function isMatchOver(){
 
 
 function endMatch(){
-    console.log("overrrrrrrrrrrr");
-    document.querySelector('#player1-name').classList.remove('active');
-    document.querySelector('#player2-name').classList.remove('active');
+    let winner = match.players[0].legs > match.players[1].legs ? match.players[0].name : match.players[1].name;
+    messageAlert(`${winner} wins!`, `${winner} wins ${match.players[0].legs} legs to ${match.players[1].legs} legs`);
 }
 
 
@@ -184,7 +181,8 @@ function closeFullscreen() {
 function clickDirector(e){
 
     if(e.target.classList.contains('quick-btn')) {
-        console.log("quick-btn");
+        let value = parseInt(e.target.innerText);
+        validateScore(value);
     }
 
     else if(e.target.classList.contains('calc-btn')) {
@@ -198,10 +196,6 @@ function clickDirector(e){
     else if(e.target.classList.contains('enter-btn')) {
         let value = turnScore.innerText;
         (value === "") ? messageAlert("No Score", "Please enter a valid score and press Enter...") : validateScore(value);
-    }
-
-    else if(e.target.classList.contains('easy-score-btn')) {
-        console.log("easy score");
     }
 
     else if(e.target.classList.contains('log')) {
@@ -250,13 +244,17 @@ function setupLegs(click){
 function startMatch(){
     let name1 = document.querySelector('#p1_name').value;
     let name2 = document.querySelector('#p2_name').value;
-    let raceTo = document.querySelector('#setup-num-legs').value;
+
+    let raceTo = document.querySelector('#setup-num-legs').innerText;
     match.scoreToWin = 501;
 
     //set default match parameters
     match.playerA.name = (name1 === "") ? "Player A" : name1;
     match.playerB.name = (name2 === "") ? "Player B" : name2;
     match.legsToWin = (raceTo === "") ? 1 : parseInt(raceTo);
+
+    player1NameDiv.innerHTML = match.players[0].name;
+    player2NameDiv.innerHTML = match.players[1].name;
 
     match.startNewLeg();
     displayDirector(appScreen);

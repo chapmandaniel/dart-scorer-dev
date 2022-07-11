@@ -48,7 +48,6 @@ const appBtn = document.querySelectorAll('.app-btn');
 
 appBtn.forEach(function(btn) {
     btn.addEventListener('click', function(e) {
-        console.log(e);
         clickDirector(e);
     });
 });
