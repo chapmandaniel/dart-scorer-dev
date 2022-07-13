@@ -277,4 +277,8 @@ function messageAlert(title, message){
 function ezSubmit(){
     match.throwDarts(parseInt(ezScoreSubmit.innerText));
     displayDirector(appScreen);
+    scoreArray = [];
+    document.querySelector('#nm-score1').innerText = "";
+    document.querySelector('#nm-score2').innerText = "";
+    document.querySelector('#nm-score3').innerText = "";
 }
