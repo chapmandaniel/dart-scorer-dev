@@ -22,9 +22,9 @@ function noMathScore(hitScore) {
     scoreArray.push(hitScore);
     console.log(scoreArray);
 
-    (typeof scoreArray[0] === 'undefined') ? null : document.querySelector('#nm-score1').innerHTML = scoreArray[0];
-    (typeof scoreArray[1] === 'undefined') ? null : document.querySelector('#nm-score2').innerHTML = scoreArray[1];
-    (typeof scoreArray[2] === 'undefined') ? null : document.querySelector('#nm-score3').innerHTML = scoreArray[2];
+    (typeof scoreArray[0] === 'undefined') ? null : document.querySelector('#nm-score1').innerText = scoreArray[0];
+    (typeof scoreArray[1] === 'undefined') ? null : document.querySelector('#nm-score2').innerText = scoreArray[1];
+    (typeof scoreArray[2] === 'undefined') ? null : document.querySelector('#nm-score3').innerText = scoreArray[2];
 
     // if(scoreArray.length === 3) {
     //     let score = scoreArray[0] + scoreArray[1] + scoreArray[2];
@@ -36,7 +36,7 @@ function noMathScore(hitScore) {
         score += scoreArray[i];
     }
 
-    document.querySelector('#nm-submit').innerHTML = score;
+    ezScoreSubmit.innerText = score;
 }
 
 

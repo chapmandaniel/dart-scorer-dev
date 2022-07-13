@@ -11,14 +11,7 @@
 }
 
 .turn {
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-top: 8px;
-    padding-bottom: 8px;
-    background-color: #2e2e2e;
-    font-size: 22px;
-    color: dimgray;
-    margin-bottom: 4px;
+    @apply text-center text-gray-400 text-lg md:text-2xl p-4 rounded-lg mb-2 bg-neutral-600;
 }
 
 .btn-disabled {

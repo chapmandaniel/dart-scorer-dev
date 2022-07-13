@@ -18,6 +18,7 @@ const finishButton3 = document.querySelector('#finish-darts-3');
 const matchSetupScreen = document.querySelector('#match-setup');
 const appScreen = document.querySelector('#app-container');
 const easyScoreScreen = document.querySelector('#easy-score-container');
+const ezScoreSubmit = document.querySelector('#nm-submit');
 
 const setupDecreaseLeg = document.querySelector('#btn-decrease-leg');
 const setupAddLeg = document.querySelector('#btn-increase-leg');

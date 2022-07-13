@@ -213,6 +213,10 @@ function clickDirector(e){
     else if(e.target.classList.contains('start-match')) {
         startMatch();
     }
+
+    else if(e.target.innerHTML === "EZScore") {
+        displayDirector(easyScoreScreen);
+    }
 }
 
 
@@ -268,4 +272,9 @@ function messageAlert(title, message){
     setTimeout(function(){
         displayDirector(appScreen);
     }, 3000);
+}
+
+function ezSubmit(){
+    match.throwDarts(parseInt(ezScoreSubmit.innerText));
+    displayDirector(appScreen);
 }
