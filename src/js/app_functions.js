@@ -39,6 +39,9 @@ function isMatchOver(){
 function endMatch(){
     let winner = match.players[0].legs > match.players[1].legs ? match.players[0].name : match.players[1].name;
     messageAlert(`${winner} wins!`, `${winner} wins ${match.players[0].legs} legs to ${match.players[1].legs} legs`);
+    setTimeout(function(){
+        displayDirector(startScreen);
+    }   , 3000);
 }
 
 
