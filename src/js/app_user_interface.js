@@ -32,13 +32,16 @@ const messageTitle = document.querySelector('#message-title');
 const messageDescription = document.querySelector('#message-description');
 const messageButton = document.querySelector('#message-button');
 
+const undoModal = document.querySelector('#undo-modal')
+
 
 const nmDivContainer = document.querySelector('#nm-full-container');
 const nmButton = document.querySelector('#nm-submit');
 const nmToggleBtn = document.querySelector('#nm-toggle-btn');
 const appBtn = document.querySelectorAll('.app-btn');
 
-
+let undoMode = false;
+let undoAmount = 0;
 
 
 /**

@@ -118,7 +118,7 @@ function turnLogManager(){
             p1TurnLog.innerHTML = "";
             let p1TurnLogEntry = document.createElement('div');
             p1TurnLogEntry.classList.add('turn');
-            p1TurnLogEntry.innerText = visit.score;
+            p1TurnLogEntry.innerHTML = visit.score;
             p1Log.appendChild(p1TurnLogEntry);
         });
     }
@@ -127,13 +127,23 @@ function turnLogManager(){
         match.players[1].visits.forEach(function(visit){
             let p2TurnLogEntry = document.createElement('div');
             p2TurnLogEntry.classList.add('turn');
-            p2TurnLogEntry.innerText = visit.score;
+            p2TurnLogEntry.innerHTML = visit.score;
             p2Log.appendChild(p2TurnLogEntry);
         });
     }
 
     p1TurnLog.appendChild(p1Log);
     p2TurnLog.appendChild(p2Log);
+
+    // const logBtn = document.querySelectorAll('.turn');
+    //
+    // logBtn.forEach(function(btn) {
+    //     btn.addEventListener('click', function(e) {
+    //
+    //         displayDirector(undoModal);
+    //
+    //     });
+    // });
 }
 
 
@@ -170,6 +180,7 @@ function closeFullscreen() {
         document.msExitFullscreen();
     }
 }
+
 
 /**-------------------------------------------------------------------------------------
  * click director function that directs clicks to proper function, and click listener
@@ -217,8 +228,19 @@ function clickDirector(e){
     else if(e.target.innerHTML === "EZScore") {
         displayDirector(easyScoreScreen);
     }
+
+    else if(e.target.innerHTML === "UNDO") {
+        undoFunction();
+    }
 }
 
+function undoFunction(){
+    console.log("undo");
+    match.alternateTurns();
+    let undoValue = match.atTheOche.visits.pop();
+    match.atTheOche.score += undoValue.score;
+    updateInterface();
+}
 
 
 /**-------------------------------------------------------------------------------------
@@ -232,6 +254,7 @@ function displayDirector(active){
     appScreen.classList.add('hidden');
     easyScoreScreen.classList.add('hidden');
     messageModal.classList.add('hidden');
+    undoModal.classList.add('hidden');
     active.classList.remove('hidden');
 }
 
